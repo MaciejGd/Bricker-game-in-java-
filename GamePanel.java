@@ -80,10 +80,11 @@ public class GamePanel extends JPanel implements Runnable{
 	public void bonusSpawn(Ball ball) {
 		if(destroyedBricksCounter%11==0) {
 			addBonus(ball.x,ball.y);
+			destroyedBricksCounter = 0;
 		}
 	}
 	public void draw(Graphics g) {
-		if(gameEvaluation()!=0 && isWon()!=0) {
+		if(!gameEvaluation() && !isWon()) {
 			paddle.draw(g);
 			for(int i = 0; i<listOfBalls.size();i++) {
 				listOfBalls.get(i).draw(g);
@@ -97,10 +98,10 @@ public class GamePanel extends JPanel implements Runnable{
 				}
 			}
 		}
-		else if(gameEvaluation()==0){
+		else if(gameEvaluation()){
 			gameOver(g);
 		}
-		else if(isWon()==0) {
+		else if(isWon()) {
 			startGame = false;
 			youWon(g);
 		}
@@ -188,20 +189,20 @@ public class GamePanel extends JPanel implements Runnable{
 			}
 		}	
 	}
-	public int gameEvaluation() {
-		int counter = 0;
+	public boolean gameEvaluation() {
+		boolean counter = true;
 		for(int i = 0;i<listOfBalls.size();i++) {
 			if(listOfBalls.get(i).y<GAME_HEIGHT) {
-				counter++;
+				counter = false;
 			}
 		}
 		return counter;
 	}
-	public int isWon() {
-		int won = 0;
+	public boolean isWon() {
+		boolean won = true;
 		for(int i = 0; i<bricks.length;i++) {
 			if(bricks[i].destroyed==false) {
-				won++;
+				won = false;
 			}
 		}
 		return won;
